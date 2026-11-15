@@ -10,7 +10,32 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
-<style>.katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}</style>
+<style>
+  .katex-display{overflow-x:auto;overflow-y:hidden;padding:.3em 0}
+  /* Encadrés de cours */
+  .box{border-left:4px solid;border-radius:.75rem;padding:.75rem 1rem;margin:.75rem 0;font-size:.95rem}
+  .box strong{display:block;margin-bottom:.2rem}
+  .box-def{background:#eff6ff;border-color:#3b82f6}
+  .box-prop{background:#ecfdf5;border-color:#10956b}
+  .box-met{background:#fffbeb;border-color:#f59e0b}
+  .box-ex{background:#f5f3ff;border-color:#8b5cf6}
+  /* Contenu des séances */
+  .seance h4{font-weight:600;color:#0f2747;margin-top:.9rem;margin-bottom:.2rem}
+  .seance ul{list-style:disc;padding-left:1.25rem;margin:.25rem 0}
+  .seance ol{list-style:decimal;padding-left:1.25rem;margin:.25rem 0}
+  .seance p{margin:.35rem 0}
+  /* Impression : seule la séance choisie est imprimée */
+  @media print {
+    body * { visibility: hidden !important; }
+    .print-target, .print-target * { visibility: visible !important; }
+    .print-target {
+      position: absolute !important; left: 0; top: 0; width: 100%;
+      box-shadow: none !important; border: none !important;
+    }
+    .print-target .panel { display: block !important; }
+    .print-target .no-print { display: none !important; }
+  }
+</style>
 </head>
 <body class="bg-ivoire text-slate-800 min-h-screen flex flex-col">
 
@@ -42,12 +67,12 @@
     <button data-tab="espace-6e" onclick="show('espace-6e')" class="text-left bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:border-ciel hover:shadow-md transition">
       <span class="text-xs font-semibold text-emeraude">CYCLE 3</span>
       <h3 class="text-lg font-bold text-marine mt-1">Classe de 6e</h3>
-      <p class="text-sm text-slate-600">Fractions, partage, nombres décimaux…</p>
+      <p class="text-sm text-slate-600">Droites, cercles, fractions, décimaux…</p>
     </button>
     <button data-tab="espace-5e" onclick="show('espace-5e')" class="text-left bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:border-ciel hover:shadow-md transition">
       <span class="text-xs font-semibold text-emeraude">CYCLE 4</span>
       <h3 class="text-lg font-bold text-marine mt-1">Classe de 5e</h3>
-      <p class="text-sm text-slate-600">Nombres relatifs, calcul littéral…</p>
+      <p class="text-sm text-slate-600">Nombres relatifs, angles, calcul littéral…</p>
     </button>
     <button data-tab="espace-4e" onclick="show('espace-4e')" class="text-left bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:border-ciel hover:shadow-md transition">
       <span class="text-xs font-semibold text-emeraude">CYCLE 4</span>
@@ -95,7 +120,6 @@
         <p>Prendre une fraction d'une quantité : $\frac{3}{4}$ de $20 = 20 \div 4 \times 3 = 15$.</p>
       </div>
       <div class="flex flex-wrap gap-2">
-        <a href="#" download class="px-4 py-2 rounded-lg bg-emeraude text-white text-sm font-medium hover:opacity-90"><!-- Remplacer # par le lien vers la fiche PDF -->Télécharger la fiche PDF</a>
         <button onclick="tg('c6-1')" class="px-4 py-2 rounded-lg border border-marine text-marine text-sm font-medium hover:bg-marine hover:text-white">Voir le corrigé</button>
         <button onclick="copier(CONSIGNE)" class="px-4 py-2 rounded-lg bg-ciel/30 text-marine text-sm font-medium hover:bg-ciel/50">Aide aux devoirs IA</button>
       </div>
@@ -220,7 +244,7 @@
   </div>
   <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3">
     <h3 class="font-bold text-marine">Matériel</h3>
-    <p class="text-sm">Règle graduée, équerre, compas, calculatrice (mode, réglages et vérification avant chaque contrôle).</p>
+    <p class="text-sm">Règle graduée, équerre, compas, rapporteur, calculatrice (mode, réglages et vérification avant chaque contrôle).</p>
   </div>
   <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3">
     <h3 class="font-bold text-marine">Aide aux devoirs avec une IA</h3>
@@ -237,60 +261,438 @@
 <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-emeraude text-white px-5 py-3 rounded-xl shadow-lg text-sm opacity-0 transition-opacity pointer-events-none">✅ Consigne copiée !</div>
 
 <!-- =========================================================
-     CAHIER DE TEXTES – DONNÉES
+     CAHIER DE TEXTES – DONNÉES (mode « Zéro PDF »)
+
      Pour ajouter une séance : copiez un bloc { ... }, collez-le
      à la fin du tableau (avant le ]; ), puis modifiez les valeurs.
-     - date : format AAAA-MM-JJ
-     - pdfCours / pdfExercices / pdfCorrige : chemin du fichier
-       (ex. "pdf/5e-ch9-cours.pdf"). Laisser "" pour masquer le bouton.
-     - travail / dateLimite : "" si rien à faire
+
+     - niveau        : "6e", "5e" ou "4e"
+     - chapitre      : libellé complet du chapitre
+     - seance        : "Séance 3"
+     - date          : libellé complet, ex. "Mardi 17 novembre 2026"
+     - resume        : liste courte des notions abordées en classe
+     - coursHTML     : trace écrite (encadrés box-def, box-prop, box-met, box-ex)
+     - exercicesHTML : exercices d'application et d'approfondissement
+     - corrigeHTML   : corrigé détaillé, rédaction On sait que / Or / Donc
+     - devoirs       : { travail: "...", dateLimite: "..." } ("" si rien)
+     - pdfOptionnel  : "" par défaut ; nom de fichier externe si besoin
+                       (ex. "pdf/6e-s8.pdf") → affiche un bouton PDF
+
+     Important : le contenu est écrit avec String.raw`...`, ce qui
+     permet d'écrire les formules LaTeX (\frac, \sqrt…) sans les
+     doubler. Ne pas utiliser de backtick ( ` ) ni de ${ } dans le contenu.
      ========================================================= -->
 <script>
 const progressionData = [
-  /* ---------- 6e ---------- */
+
+  /* ====================== 6e ====================== */
   {
-    niveau: "6e", chapitre: 8, titreChapitre: "Droites et cercles",
-    date: "2026-11-12", seance: 7,
-    cours: ["Droites sécantes, parallèles, perpendiculaires ; notations $(d)$, $[AB]$, $[AB)$", "Propriété : deux droites perpendiculaires à une même troisième sont parallèles"],
-    exercices: ["Ex 14 à 16 du manuel : tracer des parallèles et perpendiculaires à l'équerre", "Ex 22 : coder les angles droits et les segments de même longueur"],
-    pdfCours: "", pdfExercices: "", pdfCorrige: "",
-    travail: "Revoir la notation des droites et des segments (fiche 8).", dateLimite: "2026-11-16"
+    niveau: "6e",
+    chapitre: "Chapitre 8 : Droites et cercles",
+    seance: "Séance 7",
+    date: "Jeudi 12 novembre 2026",
+    resume: [
+      "Droites sécantes, parallèles et perpendiculaires",
+      "Notations : droite $(d)$, segment $[AB]$, demi-droite $[AB)$",
+      "Propriété admise : deux droites perpendiculaires à une même troisième sont parallèles"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Vocabulaire</h4>
+      <p>Deux droites d'un même plan sont soit <strong>sécantes</strong> (elles ont un point commun), soit <strong>parallèles</strong> (elles n'en ont aucun).</p>
+      <div class="box box-def"><strong>Définition</strong>Deux droites sont <em>perpendiculaires</em> lorsqu'elles se coupent en formant un angle droit. On note $(d_1) \perp (d_2)$.</div>
+
+      <h4>2. Notations</h4>
+      <ul>
+        <li>$(d)$ : la droite $d$ (illimitée des deux côtés)</li>
+        <li>$[AB]$ : le segment d'extrémités $A$ et $B$</li>
+        <li>$[AB)$ : la demi-droite d'origine $A$ passant par $B$</li>
+      </ul>
+
+      <div class="box box-prop"><strong>Propriété (admise)</strong>Si deux droites sont perpendiculaires à une même troisième droite, alors elles sont parallèles entre elles.</div>
+
+      <div class="box box-met"><strong>Méthode – tracer une parallèle à $(d)$ passant par $A$</strong>
+        1. Placer l'équerre contre $(d)$.<br>
+        2. Appuyer la règle contre l'autre côté de l'équerre.<br>
+        3. Faire glisser l'équerre jusqu'à ce que son bord passe par $A$, puis tracer.
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        On donne $(d_1) \perp (d)$ et $(d_2) \perp (d)$.<br>
+        <em>On sait que</em> $(d_1) \perp (d)$ et $(d_2) \perp (d)$.<br>
+        <em>Or</em>, si deux droites sont perpendiculaires à une même troisième, alors elles sont parallèles.<br>
+        <em>Donc</em> $(d_1) \parallel (d_2)$.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>Tracer à l'équerre la perpendiculaire à $(d)$ passant par le point $A$ (placé hors de $(d)$).</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>Les droites $(d_1)$ et $(d_2)$ sont perpendiculaires à $(d)$. Peut-on affirmer que $(d_1)$ et $(d_2)$ sont parallèles ? Justifier.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>On donne $(d) \parallel (d')$ et $(d'') \perp (d)$. Que peut-on dire de $(d'')$ et $(d')$ ? Justifier.</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p>Pour tracer la perpendiculaire : placer l'équerre contre $(d)$, faire glisser la règle contre l'autre côté de l'équerre, puis faire glisser l'équerre pour que son bord passe par $A$ et tracer la droite. On obtient bien un angle droit codé.</p>
+
+      <h4>Standard</h4>
+      <p><em>On sait que</em> $(d_1) \perp (d)$ et $(d_2) \perp (d)$.<br>
+      <em>Or</em>, si deux droites sont perpendiculaires à une même troisième, alors elles sont parallèles.<br>
+      <em>Donc</em> $(d_1) \parallel (d_2)$.</p>
+
+      <h4>Approfondissement</h4>
+      <p><em>On sait que</em> $(d) \parallel (d')$ et $(d'') \perp (d)$.<br>
+      <em>Or</em>, si une droite est perpendiculaire à l'une de deux droites parallèles, elle est perpendiculaire à l'autre.<br>
+      <em>Donc</em> $(d'') \perp (d')$.</p>
+    `,
+    devoirs: {
+      travail: "Revoir la notation des droites et des segments (fiche 8). Faire l'exercice 19 p. 127.",
+      dateLimite: "Lundi 16 novembre 2026"
+    },
+    pdfOptionnel: ""
   },
   {
-    niveau: "6e", chapitre: 8, titreChapitre: "Droites et cercles",
-    date: "2026-11-16", seance: 8,
-    cours: ["Cercle de centre O et de rayon r : tracé au compas, vocabulaire (rayon, diamètre, corde)", "Médiatrice d'un segment : droite perpendiculaire à ce segment passant par son milieu"],
-    exercices: ["Ex 30 : construire la médiatrice à la règle et au compas", "Ex 33 : trouver le centre d'un cercle passant par trois points donnés"],
-    pdfCours: "", pdfExercices: "pdf/6e-ch8-exercices-mediatrice.pdf", pdfCorrige: "",
-    travail: "Ex 34 à 36 (tracés soignés, codages en couleur).", dateLimite: "2026-11-19"
+    niveau: "6e",
+    chapitre: "Chapitre 8 : Droites et cercles",
+    seance: "Séance 8",
+    date: "Lundi 16 novembre 2026",
+    resume: [
+      "Cercle de centre $O$ et de rayon $r$ : tracé au compas, rayon, diamètre, corde",
+      "Médiatrice d'un segment : tracé et propriété d'équidistance",
+      "Centre du cercle passant par trois points non alignés"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Le cercle</h4>
+      <div class="box box-def"><strong>Définition</strong>Le cercle de centre $O$ et de rayon $r$ est l'ensemble des points situés à la distance $r$ de $O$.</div>
+      <p>Vocabulaire : le <strong>rayon</strong> relie le centre à un point du cercle ; le <strong>diamètre</strong> passe par le centre et a pour longueur deux rayons ; une <strong>corde</strong> relie deux points du cercle.</p>
+
+      <h4>2. La médiatrice</h4>
+      <div class="box box-def"><strong>Définition</strong>La médiatrice d'un segment $[AB]$ est la droite perpendiculaire à $[AB]$ passant par son milieu.</div>
+
+      <div class="box box-prop"><strong>Propriété</strong>Si un point $M$ appartient à la médiatrice de $[AB]$, alors $MA = MB$. Réciproquement, un point situé à égale distance de $A$ et de $B$ appartient à la médiatrice.</div>
+
+      <div class="box box-met"><strong>Méthode – construire la médiatrice au compas</strong>
+        1. Avec un écartement supérieur à la moitié de $AB$, tracer un arc de cercle centré en $A$.<br>
+        2. Avec le même écartement, tracer un arc centré en $B$ : il coupe le premier en deux points.<br>
+        3. Tracer la droite passant par ces deux points : c'est la médiatrice.
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        Trois points $A$, $B$, $C$ non alignés. Le point $O$ est à l'intersection des médiatrices de $[AB]$ et de $[BC]$.<br>
+        <em>On sait que</em> $O$ est sur la médiatrice de $[AB]$ et sur la médiatrice de $[BC]$.<br>
+        <em>Or</em>, un point de la médiatrice d'un segment est à égale distance de ses extrémités.<br>
+        <em>Donc</em> $OA = OB$ et $OB = OC$, soit $OA = OB = OC$ : $O$ est le centre du cercle passant par $A$, $B$ et $C$.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>Tracer un cercle de centre $O$ et de rayon $3$ cm. Placer un point $A$ sur ce cercle et vérifier que $OA = 3$ cm.</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>Tracer un segment $[AB]$ de $6$ cm. Construire sa médiatrice au compas, noter $I$ le milieu de $[AB]$ et vérifier que $IA = IB = 3$ cm.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>Tracer trois points $A$, $B$, $C$ non alignés. Construire le centre du cercle qui passe par ces trois points, puis tracer ce cercle.</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p>Le compas est piqué en $O$ avec une ouverture de 3 cm ; on trace le cercle. Le point $A$ est sur le cercle donc $OA = 3$ cm.</p>
+
+      <h4>Standard</h4>
+      <p>On trace $[AB]$ avec $AB = 6$ cm. Les arcs de cercle centrés en $A$ et $B$ (même écartement, supérieur à 3 cm) se coupent en deux points ; la droite qui les relie est la médiatrice. Elle coupe $[AB]$ en $I$, milieu du segment.<br>
+      <em>On sait que</em> $I$ est le milieu de $[AB]$, donc $IA = IB = \dfrac{6}{2} = 3$ cm.</p>
+
+      <h4>Approfondissement</h4>
+      <p><em>On sait que</em> $O$ appartient à la médiatrice de $[AB]$ et à la médiatrice de $[BC]$.<br>
+      <em>Or</em>, un point de la médiatrice d'un segment est à égale distance de ses extrémités.<br>
+      <em>Donc</em> $OA = OB = OC$. Le cercle de centre $O$ et de rayon $OA$ passe par $A$, $B$ et $C$.</p>
+    `,
+    devoirs: {
+      travail: "Ex 34 à 36 : tracés soignés, codages en couleur des segments de même longueur.",
+      dateLimite: "Jeudi 19 novembre 2026"
+    },
+    pdfOptionnel: ""
   },
 
-  /* ---------- 5e ---------- */
+  /* ====================== 5e ====================== */
   {
-    niveau: "5e", chapitre: 3, titreChapitre: "Nombres relatifs : repérage et opérations",
-    date: "2026-11-12", seance: 6,
-    cours: ["Distance entre deux points d'une droite graduée : $|x_B - x_A|$", "Addition de relatifs : même signe on ajoute, signes différents on soustrait et on garde le signe du plus grand"],
-    exercices: ["Ex 41 à 44 : additionner et soustraire des relatifs", "Ex 50 : calculer des distances sur une droite graduée"],
-    pdfCours: "", pdfExercices: "", pdfCorrige: "",
-    travail: "Ex 52 et 55 (justifier le signe de chaque résultat).", dateLimite: "2026-11-17"
+    niveau: "5e",
+    chapitre: "Chapitre 3 : Nombres relatifs (repérage et opérations)",
+    seance: "Séance 6",
+    date: "Jeudi 12 novembre 2026",
+    resume: [
+      "Distance entre deux points d'une droite graduée : $|x_B - x_A|$",
+      "Addition de nombres relatifs : même signe ou signes différents",
+      "Calcul d'écarts et de variations"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Distance sur une droite graduée</h4>
+      <div class="box box-def"><strong>Définition</strong>La distance entre deux points $A$ et $B$ d'abscisses $x_A$ et $x_B$ est $AB = |x_B - x_A|$, où $|\,\cdot\,|$ désigne la valeur absolue (distance à zéro).</div>
+
+      <h4>2. Addition de deux relatifs</h4>
+      <div class="box box-prop"><strong>Propriété</strong>
+        • Même signe : on additionne les distances à zéro et on garde le signe commun.<br>
+        • Signes différents : on soustrait les distances à zéro et on garde le signe du nombre qui est le plus loin de zéro.
+      </div>
+
+      <div class="box box-met"><strong>Méthode – enchaîner un calcul</strong>
+        1. Regrouper les nombres positifs entre eux et les négatifs entre eux.<br>
+        2. Calculer chaque groupe.<br>
+        3. Faire la somme finale en appliquant la règle des signes différents.
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        Calculer $A = -3 + 7 - 9$ puis la distance entre $B(-3)$ et $C(5)$.<br>
+        <em>On sait que</em> $A = -3 + 7 - 9$.<br>
+        <em>Or</em> $-3 + 7 = 4$ (signes différents, $7 - 3 = 4$ et le plus grand est positif), puis $4 - 9 = -5$.<br>
+        <em>Donc</em> $A = -5$.<br>
+        Pour la distance : $BC = |5 - (-3)| = |8| = 8$.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>Calculer $-4 + 9$ puis $-6 - 2$.</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>Les points $A(-7)$ et $B(3)$ sont placés sur une droite graduée. Calculer la distance $AB$.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>La température est de $6\,^\circ$C à midi et de $-9\,^\circ$C le soir. Quel est l'écart de température entre midi et le soir ?</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p>$-4 + 9 = +(9 - 4) = 5$ (signes différents, le plus grand est positif).<br>
+      $-6 - 2 = -6 + (-2) = -(6 + 2) = -8$ (même signe négatif).</p>
+
+      <h4>Standard</h4>
+      <p><em>On sait que</em> $A(-7)$ et $B(3)$.<br>
+      <em>Or</em> $AB = |x_B - x_A| = |3 - (-7)| = |10|$.<br>
+      <em>Donc</em> $AB = 10$ unités.</p>
+
+      <h4>Approfondissement</h4>
+      <p><em>On sait que</em> la température est $6\,^\circ$C à midi et $-9\,^\circ$C le soir.<br>
+      <em>Or</em> l'écart est la distance entre ces deux nombres : $6 - (-9) = 6 + 9 = 15$.<br>
+      <em>Donc</em> l'écart de température est de $15\,^\circ$C.</p>
+    `,
+    devoirs: {
+      travail: "Ex 52 et 55 : justifier le signe de chaque résultat avant de calculer.",
+      dateLimite: "Mardi 17 novembre 2026"
+    },
+    pdfOptionnel: ""
   },
   {
-    niveau: "5e", chapitre: 9, titreChapitre: "Angles",
-    date: "2026-11-16", seance: 1,
-    cours: ["Vocabulaire : angle aigu, obtus, droit, plat ; notation $\\widehat{ABC}$", "Mesure d'un angle au rapporteur : centrer le rapporteur sur le sommet, aligner un côté sur 0°"],
-    exercices: ["Ex 1 et 2 : reconnaître le type d'un angle à vue d'œil puis vérifier", "Ex 5 : mesurer et coder les angles d'un triangle"],
-    pdfCours: "pdf/5e-ch9-angles-cours.pdf", pdfExercices: "", pdfCorrige: "pdf/5e-ch9-angles-corrige.pdf",
-    travail: "Tracer des angles de 40°, 95° et 130° au rapporteur.", dateLimite: "2026-11-19"
+    niveau: "5e",
+    chapitre: "Chapitre 9 : Angles",
+    seance: "Séance 1",
+    date: "Lundi 16 novembre 2026",
+    resume: [
+      "Vocabulaire : angles aigu, droit, obtus et plat",
+      "Notation $\\widehat{ABC}$ et sommet de l'angle",
+      "Mesure et tracé d'un angle au rapporteur"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Vocabulaire</h4>
+      <div class="box box-def"><strong>Définition</strong>Un angle est formé par deux demi-droites de même origine, appelée <em>sommet</em>. L'angle $\widehat{ABC}$ a pour sommet $B$ et pour côtés $[BA)$ et $[BC)$.</div>
+
+      <ul>
+        <li><strong>Aigu</strong> : mesure comprise entre $0^\circ$ et $90^\circ$ (exclus).</li>
+        <li><strong>Droit</strong> : mesure égale à $90^\circ$ (codé par un carré dans l'angle).</li>
+        <li><strong>Obtus</strong> : mesure comprise entre $90^\circ$ et $180^\circ$ (exclus).</li>
+        <li><strong>Plat</strong> : mesure égale à $180^\circ$.</li>
+      </ul>
+
+      <div class="box box-met"><strong>Méthode – mesurer un angle au rapporteur</strong>
+        1. Centrer le rapporteur sur le sommet de l'angle.<br>
+        2. Aligner l'un des côtés sur le zéro de la graduation.<br>
+        3. Lire la graduation où passe l'autre côté. Vérifier le type de l'angle pour éviter l'erreur de lecture (graduation intérieure ou extérieure).
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        On trace $\widehat{ABC}$ de mesure $65^\circ$.<br>
+        <em>On sait que</em> $65^\circ$ est compris entre $0^\circ$ et $90^\circ$.<br>
+        <em>Or</em> un angle dont la mesure est comprise entre $0^\circ$ et $90^\circ$ est aigu.<br>
+        <em>Donc</em> $\widehat{ABC}$ est un angle aigu.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>Classer les angles de mesures $40^\circ$, $90^\circ$, $125^\circ$ et $180^\circ$ (aigu, droit, obtus ou plat).</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>Tracer l'angle $\widehat{ABC}$ de mesure $65^\circ$ au rapporteur, puis l'angle $\widehat{DEF}$ de mesure $130^\circ$.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>Tracer un triangle $ABC$ quelconque, mesurer ses trois angles, puis calculer leur somme. Que remarque-t-on ?</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p>$40^\circ$ : aigu. $90^\circ$ : droit. $125^\circ$ : obtus. $180^\circ$ : plat.</p>
+
+      <h4>Standard</h4>
+      <p>On centre le rapporteur en $B$, on aligne $[BC)$ sur le zéro, puis on repère $65^\circ$ et on trace $[BA)$. Pour $130^\circ$, on repère la graduation correspondante : l'angle est obtus.</p>
+
+      <h4>Approfondissement</h4>
+      <p>Les trois angles mesurés ont une somme proche de $180^\circ$ (à quelques degrés près à cause des erreurs de tracé).<br>
+      <em>On sait que</em> la somme des angles d'un triangle est égale à $180^\circ$ (propriété étudiée en séance 2).<br>
+      <em>Donc</em> la mesure obtenue au rapporteur doit être proche de $180^\circ$ : c'est la vérification.</p>
+    `,
+    devoirs: {
+      travail: "Tracer des angles de $40^\\circ$, $95^\\circ$ et $130^\\circ$ au rapporteur, en codant leur nature.",
+      dateLimite: "Jeudi 19 novembre 2026"
+    },
+    pdfOptionnel: ""
   },
 
-  /* ---------- 4e ---------- */
+  /* ====================== 4e ====================== */
   {
-    niveau: "4e", chapitre: 1, titreChapitre: "Le théorème de Pythagore",
-    date: "2026-11-16", seance: 1,
-    cours: ["Racine carrée d'un nombre positif $a$ : $\\sqrt{a}^{\\,2} = a$ ; exemple $\\sqrt{100} = 10$", "Théorème de Pythagore (sens direct) : si $ABC$ est rectangle en $A$, alors $BC^2 = AB^2 + AC^2$"],
-    exercices: ["Ex 1 à 4 du manuel : racines carrées à la calculatrice", "Ex 9 : calcul de l'hypoténuse, rédaction On sait que / Or / Donc"],
-    pdfCours: "pdf/4e-ch1-pythagore-cours.pdf", pdfExercices: "", pdfCorrige: "",
-    travail: "Ex 11 et 13 du manuel (rédaction complète).", dateLimite: "2026-11-18"
+    niveau: "4e",
+    chapitre: "Chapitre 1 : Le théorème de Pythagore",
+    seance: "Séance 1",
+    date: "Lundi 16 novembre 2026",
+    resume: [
+      "Racine carrée d'un nombre positif : $\\sqrt{a}^{\\,2} = a$",
+      "Théorème de Pythagore (sens direct) : calcul de l'hypoténuse",
+      "Rédaction « On sait que / Or / Donc »"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Racine carrée</h4>
+      <div class="box box-def"><strong>Définition</strong>Pour $a \geq 0$, la racine carrée de $a$, notée $\sqrt{a}$, est le nombre positif dont le carré vaut $a$.</div>
+      <p>Exemples : $\sqrt{100} = 10$ car $10^2 = 100$ ; $\sqrt{49} = 7$. Pour les autres nombres, la calculatrice donne une valeur approchée : $\sqrt{2} \approx 1{,}414$.</p>
+
+      <h4>2. Théorème de Pythagore</h4>
+      <div class="box box-prop"><strong>Propriété (sens direct)</strong>Si le triangle $ABC$ est rectangle en $A$, alors son hypoténuse $[BC]$ vérifie :<br>
+      $$BC^2 = AB^2 + AC^2$$</div>
+
+      <div class="box box-met"><strong>Méthode – calculer l'hypoténuse</strong>
+        1. Identifier l'hypoténuse (côté opposé à l'angle droit).<br>
+        2. Calculer les carrés des deux côtés de l'angle droit et les additionner.<br>
+        3. Prendre la racine carrée du résultat, puis conclure avec l'unité.
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        ABC est rectangle en $A$, avec $AB = 6$ cm et $AC = 8$ cm.<br>
+        <em>On sait que</em> ABC est rectangle en $A$, avec $AB = 6$ cm et $AC = 8$ cm.<br>
+        <em>Or</em>, d'après le théorème de Pythagore, $BC^2 = AB^2 + AC^2$.<br>
+        <em>Donc</em> $BC^2 = 6^2 + 8^2 = 36 + 64 = 100$, et $BC = \sqrt{100} = 10$ cm.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>À la calculatrice ou de tête, calculer $\sqrt{49}$, $\sqrt{144}$ et $\sqrt{81}$.</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>ABC est rectangle en $A$, avec $AB = 9$ cm et $AC = 12$ cm. Calculer $BC$.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>DEF est rectangle en $E$, avec $DE = 4$ cm et $EF = 3$ cm. Calculer $DF$.</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p>$\sqrt{49} = 7$ car $7^2 = 49$ ; $\sqrt{144} = 12$ car $12^2 = 144$ ; $\sqrt{81} = 9$ car $9^2 = 81$.</p>
+
+      <h4>Standard</h4>
+      <p><em>On sait que</em> ABC est rectangle en $A$, avec $AB = 9$ cm et $AC = 12$ cm.<br>
+      <em>Or</em>, d'après le théorème de Pythagore, $BC^2 = AB^2 + AC^2$.<br>
+      <em>Donc</em> $BC^2 = 81 + 144 = 225$ et $BC = \sqrt{225} = 15$ cm.</p>
+
+      <h4>Approfondissement</h4>
+      <p><em>On sait que</em> DEF est rectangle en $E$, avec $DE = 4$ cm et $EF = 3$ cm.<br>
+      <em>Or</em>, d'après le théorème de Pythagore, $DF^2 = DE^2 + EF^2$.<br>
+      <em>Donc</em> $DF^2 = 16 + 9 = 25$ et $DF = \sqrt{25} = 5$ cm.</p>
+    `,
+    devoirs: {
+      travail: "Apprendre l'énoncé du théorème. Faire les exercices 11 et 13 du manuel en rédigeant « On sait que / Or / Donc ».",
+      dateLimite: "Mercredi 18 novembre 2026"
+    },
+    pdfOptionnel: ""
+  },
+  {
+    niveau: "4e",
+    chapitre: "Chapitre 1 : Le théorème de Pythagore",
+    seance: "Séance 2",
+    date: "Mardi 17 novembre 2026",
+    resume: [
+      "Calcul d'un côté de l'angle droit : $AB^2 = BC^2 - AC^2$",
+      "Choix de la bonne formule selon la position de l'hypoténuse",
+      "Valeurs exactes et valeurs approchées"
+    ],
+    coursHTML: String.raw`
+      <h4>1. Rappel</h4>
+      <p>Dans un triangle rectangle, l'hypoténuse est toujours le plus grand côté. Quand on connaît l'hypoténuse et un côté de l'angle droit, on peut calculer l'autre côté de l'angle droit.</p>
+
+      <h4>2. Calcul d'un côté de l'angle droit</h4>
+      <div class="box box-prop"><strong>Propriété</strong>Si ABC est rectangle en $A$, alors :<br>
+      $$AB^2 = BC^2 - AC^2 \qquad \text{et} \qquad AC^2 = BC^2 - AB^2$$</div>
+
+      <div class="box box-met"><strong>Méthode – ne pas confondre les deux cas</strong>
+        • Je cherche l'<em>hypoténuse</em> : j'additionne les carrés.<br>
+        • Je cherche un <em>côté de l'angle droit</em> : je soustrais les carrés (l'hypoténuse est le plus grand carré).
+      </div>
+
+      <div class="box box-ex"><strong>Exemple rédigé</strong>
+        ABC est rectangle en $A$, avec $BC = 13$ cm et $AC = 5$ cm. Calculer $AB$.<br>
+        <em>On sait que</em> ABC est rectangle en $A$, avec $BC = 13$ cm et $AC = 5$ cm.<br>
+        <em>Or</em>, d'après le théorème de Pythagore, $BC^2 = AB^2 + AC^2$, donc $AB^2 = BC^2 - AC^2$.<br>
+        <em>Donc</em> $AB^2 = 169 - 25 = 144$ et $AB = \sqrt{144} = 12$ cm.
+      </div>
+    `,
+    exercicesHTML: String.raw`
+      <h4>Niveau Socle</h4>
+      <ol>
+        <li>ABC est rectangle en $A$, avec $BC = 10$ cm et $AC = 6$ cm. Calculer $AB$.</li>
+      </ol>
+      <h4>Niveau Standard</h4>
+      <ol start="2">
+        <li>MNP est rectangle en $M$, avec $NP = 17$ cm et $MN = 8$ cm. Calculer $MP$.</li>
+      </ol>
+      <h4>Niveau Approfondissement</h4>
+      <ol start="3">
+        <li>Une échelle de $5$ m est appuyée contre un mur vertical. Son pied est à $1{,}8$ m du mur. À quelle hauteur touche-t-elle le mur ? Donner la valeur exacte puis une valeur approchée au centimètre près.</li>
+      </ol>
+    `,
+    corrigeHTML: String.raw`
+      <h4>Socle</h4>
+      <p><em>On sait que</em> ABC est rectangle en $A$, avec $BC = 10$ cm et $AC = 6$ cm.<br>
+      <em>Or</em> $AB^2 = BC^2 - AC^2$.<br>
+      <em>Donc</em> $AB^2 = 100 - 36 = 64$ et $AB = \sqrt{64} = 8$ cm.</p>
+
+      <h4>Standard</h4>
+      <p><em>On sait que</em> MNP est rectangle en $M$, avec $NP = 17$ cm et $MN = 8$ cm.<br>
+      <em>Or</em> $MP^2 = NP^2 - MN^2$.<br>
+      <em>Donc</em> $MP^2 = 289 - 64 = 225$ et $MP = \sqrt{225} = 15$ cm.</p>
+
+      <h4>Approfondissement</h4>
+      <p><em>On sait que</em> le mur est vertical, donc le triangle formé par le mur, le sol et l'échelle est rectangle au pied du mur. L'échelle est l'hypoténuse : $5$ m ; le pied est à $1{,}8$ m.<br>
+      <em>Or</em> $h^2 = 5^2 - 1{,}8^2 = 25 - 3{,}24 = 21{,}76$.<br>
+      <em>Donc</em> $h = \sqrt{21{,}76}$ (valeur exacte), soit $h \approx 4{,}66$ m (valeur approchée au centimètre près).</p>
+    `,
+    devoirs: {
+      travail: "Ex 16 et 18 du manuel. Pour chaque exercice, écrire la rédaction complète avant de calculer.",
+      dateLimite: "Vendredi 20 novembre 2026"
+    },
+    pdfOptionnel: ""
   }
 ];
 </script>
@@ -315,7 +717,7 @@ function fallback(t){
   document.execCommand('copy'); x.remove();
 }
 
-/* ---------- Corrigés ---------- */
+/* ---------- Corrigés statiques ---------- */
 function tg(id){ document.getElementById(id).classList.toggle('hidden'); }
 
 /* ---------- Onglets ---------- */
@@ -331,7 +733,7 @@ function show(id){
 
 /* ---------- KaTeX ---------- */
 function renderMath(el){
-  if (window.renderMathInElement) renderMathInElement(el, {
+  if (window.renderMathInElement && el) renderMathInElement(el, {
     delimiters: [
       {left:'$$', right:'$$', display:true},
       {left:'$', right:'$', display:false},
@@ -341,85 +743,111 @@ function renderMath(el){
   });
 }
 
-/* ---------- Cahier de textes ---------- */
+/* ---------- Cahier de textes : affichage ---------- */
 const NIVEAUX = ['6e','5e','4e'];
 const cahierFiltre = { '6e':'all', '5e':'all', '4e':'all' };
 
-function formaterDate(iso){
-  const d = new Date(iso + 'T00:00:00');
-  const s = d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
-  return s.charAt(0).toUpperCase() + s.slice(1);
+function chapitresDe(niveau){
+  return [...new Set(progressionData.filter(s => s.niveau === niveau).map(s => s.chapitre))];
 }
 
-function listeHTML(items){
-  if (!items || !items.length) return '<p class="text-sm text-slate-400">—</p>';
-  return '<ul class="list-disc pl-5 space-y-1 text-sm">' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
-}
+function carteSeance(s, i){
+  const id = 'seance-' + i;
+  const bouton = (part, label) =>
+    `<button onclick="panneau('${id}','${part}')" class="no-print px-4 py-2 rounded-lg border border-marine text-marine text-sm font-medium hover:bg-marine hover:text-white">${label}</button>`;
+  const panneauHTML = (part, html) =>
+    `<div id="${id}-${part}" class="panel hidden mt-4 seance">${html}</div>`;
 
-function carteSeance(s){
-  const boutons = [['pdfCours','📄 Cours'], ['pdfExercices','📝 Exercices'], ['pdfCorrige','✅ Corrigé']]
-    .filter(([k]) => s[k])
-    .map(([k,label]) => `<a href="${s[k]}" download class="px-3 py-1.5 rounded-lg bg-emeraude text-white text-xs font-medium hover:opacity-90">${label}</a>`)
-    .join('');
-
-  const travail = s.travail ? `
-    <div class="rounded-xl border-l-4 border-emeraude bg-emerald-50 p-3 text-sm space-y-1">
-      <p class="font-semibold text-marine">✏️ Travail à faire${s.dateLimite ? ' – à rendre le ' + formaterDate(s.dateLimite) : ''}</p>
-      <p>${s.travail}</p>
-    </div>` : '';
+  const lien = s.pdfOptionnel
+    ? `<a href="${s.pdfOptionnel}" target="_blank" rel="noopener" class="no-print px-4 py-2 rounded-lg bg-emeraude text-white text-sm font-medium hover:opacity-90">📄 PDF externe</a>`
+    : '';
 
   return `
-    <article class="rounded-xl border border-slate-200 p-5 space-y-3">
+    <article id="${id}" class="seance-card bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3">
       <header class="flex flex-wrap items-center gap-2 text-sm">
         <span class="px-2 py-0.5 rounded bg-marine text-white font-semibold">${s.niveau}</span>
-        <span class="font-semibold text-marine">Chapitre ${s.chapitre} : ${s.titreChapitre}</span>
-        <span class="text-slate-500">· Séance ${s.seance} du chapitre</span>
+        <span class="font-semibold text-marine">${s.chapitre}</span>
+        <span class="text-slate-500">· ${s.seance}</span>
       </header>
-      <p class="text-sm font-medium text-slate-700">${formaterDate(s.date)}</p>
-      <div class="space-y-1">
-        <h4 class="font-semibold text-marine text-sm">Contenu du cours</h4>
-        ${listeHTML(s.cours)}
+      <p class="text-sm font-medium text-slate-700">${s.date}</p>
+
+      <div class="seance">
+        <h4>Notions abordées</h4>
+        <ul>${s.resume.map(r => `<li>${r}</li>`).join('')}</ul>
       </div>
-      <div class="space-y-1">
-        <h4 class="font-semibold text-marine text-sm">Exercices traités en classe</h4>
-        ${listeHTML(s.exercices)}
+
+      <div class="rounded-xl border-l-4 border-emeraude bg-emerald-50 p-3 text-sm space-y-1">
+        <p class="font-semibold text-marine">✏️ Travail à faire</p>
+        <p>${s.devoirs.travail}</p>
+        ${s.devoirs.dateLimite ? `<p class="text-xs text-slate-600">À rendre le : ${s.devoirs.dateLimite}</p>` : ''}
       </div>
-      ${boutons ? `<div class="flex flex-wrap gap-2">${boutons}</div>` : ''}
-      ${travail}
+
+      <div class="flex flex-wrap gap-2">
+        ${bouton('cours', '📖 Lire la leçon')}
+        ${bouton('exos', '✍️ Exercices')}
+        ${bouton('corrige', '✅ Voir le corrigé')}
+        <button onclick="imprimerSeance('${id}')" class="no-print px-4 py-2 rounded-lg bg-ciel/30 text-marine text-sm font-medium hover:bg-ciel/50">🖨️ Imprimer / Enregistrer en PDF</button>
+        ${lien}
+      </div>
+
+      ${panneauHTML('cours', s.coursHTML)}
+      ${panneauHTML('exos', s.exercicesHTML)}
+      ${panneauHTML('corrige', s.corrigeHTML)}
     </article>`;
 }
 
+function panneau(id, part){
+  const el = document.getElementById(`${id}-${part}`);
+  el.classList.toggle('hidden');
+  if (!el.classList.contains('hidden')) renderMath(el);
+}
+
+function imprimerSeance(id){
+  document.querySelectorAll('.print-target').forEach(e => e.classList.remove('print-target'));
+  const card = document.getElementById(id);
+  // Ouvre toutes les parties de la séance pour l'impression
+  card.querySelectorAll('.panel').forEach(p => { p.classList.remove('hidden'); renderMath(p); });
+  card.classList.add('print-target');
+  window.print();
+}
+window.addEventListener('afterprint', () => {
+  document.querySelectorAll('.print-target').forEach(e => e.classList.remove('print-target'));
+});
+
 function renderCahier(niveau){
-  const entrees = progressionData.filter(s => s.niveau === niveau);
-  const chapitres = [...new Set(entrees.map(s => s.chapitre))].sort((a,b) => a - b);
+  const entrees = progressionData
+    .map((s, i) => ({ ...s, _i: i }))
+    .filter(s => s.niveau === niveau);
+  const chapitres = chapitresDe(niveau);
   const filtre = cahierFiltre[niveau];
   const filtresBox = document.getElementById('filtres-' + niveau);
   const liste = document.getElementById('cahier-' + niveau);
   if (!filtresBox || !liste) return;
 
-  const bouton = (val, label) => {
-    const arg = val === 'all' ? "'all'" : val;
-    const actif = filtre === val;
-    return `<button onclick="filtrerCahier('${niveau}', ${arg})" class="px-3 py-1.5 rounded-lg text-sm font-medium border ${actif ? 'bg-marine text-white border-marine' : 'bg-white text-marine border-slate-300 hover:bg-ciel/20'}">${label}</button>`;
-  };
-  const titre = n => entrees.find(s => s.chapitre === n).titreChapitre;
+  const bouton = (val, label, actif) =>
+    `<button onclick="filtrerCahier('${niveau}', ${val})" class="px-3 py-1.5 rounded-lg text-sm font-medium border ${actif ? 'bg-marine text-white border-marine' : 'bg-white text-marine border-slate-300 hover:bg-ciel/20'}">${label}</button>`;
 
-  filtresBox.innerHTML = bouton('all', 'Tous les chapitres')
-    + chapitres.map(n => bouton(n, `Ch. ${n} – ${titre(n)}`)).join('');
+  filtresBox.innerHTML =
+    bouton("'all'", 'Tous les chapitres', filtre === 'all') +
+    chapitres.map((c, k) => bouton(k, c, filtre === c)).join('');
 
   const visibles = entrees
     .filter(s => filtre === 'all' || s.chapitre === filtre)
-    .sort((a,b) => b.date.localeCompare(a.date) || b.seance - a.seance);
+    .reverse(); // plus récent en premier
 
   liste.innerHTML = visibles.length
-    ? visibles.map(carteSeance).join('')
+    ? visibles.map(s => carteSeance(s, s._i)).join('')
     : '<p class="text-sm text-slate-500">Aucune séance enregistrée pour ce filtre.</p>';
 
   renderMath(liste);
 }
 
-function filtrerCahier(niveau, chap){
-  cahierFiltre[niveau] = chap;
+function filtrerCahier(niveau, cle){
+  if (cle === 'all') {
+    cahierFiltre[niveau] = 'all';
+  } else {
+    cahierFiltre[niveau] = chapitresDe(niveau)[cle];
+  }
   renderCahier(niveau);
 }
 
