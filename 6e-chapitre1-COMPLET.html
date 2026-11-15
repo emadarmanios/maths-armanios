@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>6e – Chapitre 1 : Nombres entiers et données</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
+<style>
+  :root { --marine:#0f2747; --ivoire:#f8f7f3; --ciel:#7fb3e0; --emeraude:#10956b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--ivoire); color:#1e293b; line-height:1.55; }
+  header { background:var(--marine); color:#fff; padding:16px 16px 0; }
+  header h1 { margin:0 0 4px; font-size:1.3rem; }
+  header p { margin:0 0 10px; color:var(--ciel); font-size:.9rem; }
+  nav { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; }
+  nav button { white-space:nowrap; border:0; background:transparent; color:#dbeafe; padding:8px 14px; border-radius:8px; font-size:.9rem; cursor:pointer; }
+  nav button[aria-selected="true"] { background:var(--ivoire); color:var(--marine); font-weight:600; }
+  main { max-width:900px; margin:0 auto; padding:20px 16px 60px; }
+  .view { display:none; }
+  .view.active { display:block; }
+  h2 { color:var(--marine); margin:1.4em 0 .4em; font-size:1.2rem; border-bottom:2px solid var(--ciel); padding-bottom:4px; }
+  h2:first-child { margin-top:0; }
+  h3 { color:var(--marine); margin:1.2em 0 .3em; font-size:1.05rem; }
+  .box { border-left:4px solid; border-radius:10px; padding:10px 14px; margin:10px 0; background:#fff; }
+  .box strong { display:block; margin-bottom:4px; }
+  .def { border-color:#3b82f6; background:#eff6ff; }
+  .prop { border-color:var(--emeraude); background:#ecfdf5; }
+  .met { border-color:#f59e0b; background:#fffbeb; }
+  .ex { border-color:#8b5cf6; background:#f5f3ff; }
+  .card { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:14px 18px; margin:12px 0; }
+  .level { font-weight:600; color:var(--emeraude); margin-bottom:4px; font-size:.9rem; text-transform:uppercase; letter-spacing:.03em; }
+  .btn { display:inline-block; border:1px solid var(--marine); color:var(--marine); background:#fff; border-radius:8px; padding:6px 14px; font-size:.9rem; cursor:pointer; margin-top:6px; }
+  .btn:hover { background:var(--marine); color:#fff; }
+  .sol { display:none; margin-top:10px; background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:10px 14px; font-size:.95rem; }
+  .sol.open { display:block; }
+  .choices button { display:block; width:100%; text-align:left; margin:6px 0; padding:9px 12px; border:1px solid #cbd5e1; background:#fff; border-radius:8px; cursor:pointer; font-size:.95rem; }
+  .choices button:disabled { cursor:default; }
+  .good { border-color:var(--emeraude) !important; background:#d1fae5 !important; }
+  .bad { border-color:#f87171 !important; background:#fee2e2 !important; }
+  .feedback { margin-top:6px; font-size:.92rem; min-height:1.2em; }
+  .score { font-weight:600; color:var(--marine); margin-bottom:8px; }
+  .katex-display { overflow-x:auto; overflow-y:hidden; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Chapitre 1 : Nombres entiers et données</h1>
+  <p>Mathématiques · 6e · Emad Armanios</p>
+  <nav>
+    <button data-tab="lecon" aria-selected="true" onclick="show('lecon')">Leçon</button>
+    <button data-tab="exercices" aria-selected="false" onclick="show('exercices')">Exercices</button>
+    <button data-tab="automatismes" aria-selected="false" onclick="show('automatismes')">Automatismes</button>
+    <button data-tab="problemes" aria-selected="false" onclick="show('problemes')">Résolution de problèmes</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ================= LEÇON ================= -->
+<section id="lecon" class="view active">
+  <h2>1. Lire et écrire des nombres entiers</h2>
+  <div class="box def"><strong>Définitions</strong>
+    Les dix chiffres sont $0, 1, 2, 3, 4, 5, 6, 7, 8, 9$. La <em>valeur</em> d'un chiffre dépend de sa <em>position</em>.<br>
+    $1$ dizaine $= 10$ unités ; $1$ centaine $= 10$ dizaines ; $1$ millier $= 10$ centaines ; $1$ million $= 1\,000$ milliers ; $1$ milliard $= 1\,000$ millions.
+  </div>
+  <div class="box met"><strong>Méthode : découper en classes</strong>
+    On sépare les chiffres par tranches de trois, en partant de la droite : classe des unités, des milliers, des millions, des milliards. Dans chaque classe, on lit centaines, dizaines, unités.
+  </div>
+  <div class="box ex"><strong>Exemple</strong>
+    Dans $25\,204\,879\,603$, le chiffre des centaines de milliers est $8$ et le chiffre des dizaines de millions est $0$.<br>
+    Ce nombre se lit « vingt-cinq milliards deux cent quatre millions huit cent soixante-dix-neuf mille six cent trois ».
+  </div>
+  <div class="box met"><strong>Méthode : écrire un nombre en lettres</strong>
+    Un trait d'union relie tous les mots. « million » et « milliard » prennent un « s » au pluriel. « vingt » et « cent » prennent un « s » seulement lorsqu'ils terminent le nombre.<br>
+    Exemples : $2\,080$ s'écrit « deux-mille-quatre-vingts » ; $3\,201\,700$ s'écrit « trois-millions-deux-cent-un-mille-sept-cents ».
+  </div>
+  <div class="box def"><strong>Ordre de grandeur</strong>
+    Un ordre de grandeur est un nombre proche, plus facile à lire ou à calculer de tête. La population française en 2020, $67\,063\,703$ habitants, a pour ordre de grandeur $70$ millions.
+  </div>
+
+  <h2>2. Calculer avec des nombres entiers</h2>
+  <div class="box prop"><strong>Propriétés</strong>
+    • Dans une succession d'additions, on peut changer l'ordre des termes et les regrouper.<br>
+    • Dans une succession de multiplications, on peut changer l'ordre des facteurs et les regrouper.<br>
+    • Multiplier par $10$, $100$ ou $1\,000$ revient à ajouter un, deux ou trois zéros à droite.
+  </div>
+  <div class="box met"><strong>Méthode : calcul astucieux</strong>
+    On décompose un facteur : $45 \times 21 = 45 \times (20 + 1) = 900 + 45 = 945$ ; $60 \times 18 = 60 \times (20 - 2) = 1\,200 - 120 = 1\,080$.
+  </div>
+  <div class="box met"><strong>Méthode : ordre de grandeur d'un résultat</strong>
+    On remplace chaque terme par un nombre proche facile à calculer : $1\,243 + 519 + 198 \approx 1\,200 + 500 + 200 = 1\,900$.
+  </div>
+
+  <h2>3. Organiser et représenter des données</h2>
+  <div class="box def"><strong>Vocabulaire</strong>
+    • La <em>population</em> est l'ensemble étudié.<br>
+    • Le <em>caractère</em> est ce que l'on observe.<br>
+    • L'<em>effectif</em> d'une modalité est le nombre d'individus qui la possèdent.
+  </div>
+  <div class="box met"><strong>Méthode : représentations</strong>
+    • Un <em>tableau</em> range les effectifs.<br>
+    • Un <em>diagramme en barres</em> compare des effectifs : la hauteur des barres est proportionnelle aux effectifs.<br>
+    • Un <em>graphique cartésien</em> représente une grandeur B en fonction d'une grandeur A : A sur l'axe horizontal (abscisses), B sur l'axe vertical (ordonnées).<br>
+    • Un <em>diagramme circulaire</em> représente une répartition : chaque secteur est une fraction du disque.
+  </div>
+</section>
+
+<!-- ================= EXERCICES ================= -->
+<section id="exercices" class="view">
+  <h2>A. Lire et écrire des nombres entiers</h2>
+
+  <div class="card">
+    <div class="level">Socle</div>
+    <p>1. Dans $10\,086\,772\,163$, donner le chiffre des dizaines de millions, le chiffre des centaines de mille et le chiffre des unités de milliards.</p>
+    <button class="btn" onclick="toggle('a1')">Voir le corrigé</button>
+    <div id="a1" class="sol">Découpage : $10 \mid 086 \mid 772 \mid 163$. Dizaines de millions : $8$. Centaines de mille : $7$. Unités de milliards : $0$.</div>
+  </div>
+  <div class="card">
+    <div class="level">Socle</div>
+    <p>2. Écrire en lettres : $3\,425\,678$ ; $4\,780\,300$.</p>
+    <button class="btn" onclick="toggle('a2')">Voir le corrigé</button>
+    <div id="a2" class="sol">trois-millions-quatre-cent-vingt-cinq-mille-six-cent-soixante-dix-huit ; quatre-millions-sept-cent-quatre-vingt-mille-trois-cents.</div>
+  </div>
+  <div class="card">
+    <div class="level">Standard</div>
+    <p>3. Écrire en chiffres : « cinquante-trois-millions-trente-mille-neuf » ; « neuf-millions-cent-mille-quatre-vingt ».</p>
+    <button class="btn" onclick="toggle('a3')">Voir le corrigé</button>
+    <div id="a3" class="sol">$53\,030\,009$ ; $9\,100\,080$.</div>
+  </div>
+  <div class="card">
+    <div class="level">Standard</div>
+    <p>4. Donner la valeur du chiffre $7$ dans $1\,570$ ; $370\,000$ ; $2\,700\,000\,000$.</p>
+    <button class="btn" onclick="toggle('a4')">Voir le corrigé</button>
+    <div id="a4" class="sol">$70$ (rang des dizaines) ; $70\,000$ (rang des dizaines de mille) ; $700\,000\,000$ (rang des centaines de millions).</div>
+  </div>
+  <div class="card">
+    <div class="level">Approfondissement</div>
+    <p>5. Écrire en lettres $123\,569\,547$. Donner un ordre de grandeur de la population de Paris en 2024, soit $2\,087\,600$ habitants.</p>
+    <button class="btn" onclick="toggle('a5')">Voir le corrigé</button>
+    <div id="a5" class="sol">cent-vingt-trois-millions-cinq-cent-soixante-neuf-mille-cinq-cent-quarante-sept. Ordre de grandeur : $2$ millions d'habitants.</div>
+  </div>
+
+  <h2>B. Calculer avec des nombres entiers</h2>
+  <div class="card">
+    <div class="level">Socle</div>
+    <p>6. Calculer : $4\,523 \times 10$ ; $147 \times 100$ ; $425\,803 \times 10$ ; $45\,213 \times 1\,000$.</p>
+    <button class="btn" onclick="toggle('b6')">Voir le corrigé</button>
+    <div id="b6" class="sol">$45\,230$ ; $14\,700$ ; $4\,258\,030$ ; $45\,213\,000$.</div>
+  </div>
+  <div class="card">
+    <div class="level">Socle</div>
+    <p>7. Calculer : $38\,217 \times 100$ ; $8\,743 - 299$ ; $5\,000 + 2\,350 + 650$.</p>
+    <button class="btn" onclick="toggle('b7')">Voir le corrigé</button>
+    <div id="b7" class="sol">$3\,821\,700$ ; $8\,444$ ; $8\,000$.</div>
+  </div>
+  <div class="card">
+    <div class="level">Standard</div>
+    <p>8. Calculer astucieusement : $12\,500 + 389 + 24\,500$ ; $7\,500 \times 11$ ; $999 \times 44$.</p>
+    <button class="btn" onclick="toggle('b8')">Voir le corrigé</button>
+    <div id="b8" class="sol">$37\,389$ ; $82\,500$ ; $1\,000 \times 44 - 44 = 43\,956$.</div>
+  </div>
+  <div class="card">
+    <div class="level">Standard</div>
+    <p>9. Un camion transporte $4\,850$ kg. Calculer la masse transportée par $37$ camions identiques.</p>
+    <button class="btn" onclick="toggle('b9')">Voir le corrigé</button>
+    <div id="b9" class="sol">$4\,850 \times 37 = 179\,450$ kg. Ordre de grandeur : $5\,000 \times 40 = 200\,000$ kg, cohérent.</div>
+  </div>
+  <div class="card">
+    <div class="level">Approfondissement</div>
+    <p>10. Donner un ordre de grandeur de $1\,243 + 519 + 198$, puis le résultat exact. Sachant que $954 \times 39 = 37\,206$, en déduire $954 \times 40$.</p>
+    <button class="btn" onclick="toggle('b10')">Voir le corrigé</button>
+    <div id="b10" class="sol">Ordre de grandeur : $1\,900$. Résultat exact : $1\,960$. Et $954 \times 40 = 37\,206 + 954 = 38\,160$.</div>
+  </div>
+
+  <h2>C. Organiser et représenter des données</h2>
+  <div class="card">
+    <div class="level">Socle</div>
+    <p>11. Sur $30$ élèves interrogés sur leur sport préféré : football $12$, basket $8$, natation $5$, danse $5$. Vérifier le total et donner l'effectif du basket.</p>
+    <button class="btn" onclick="toggle('c11')">Voir le corrigé</button>
+    <div id="c11" class="sol">$12 + 8 + 5 + 5 = 30$. Effectif du basket : $8$ élèves.</div>
+  </div>
+  <div class="card">
+    <div class="level">Standard</div>
+    <p>12. Sur $100$ personnes interrogées sur leurs sorties au cinéma : $0$ sortie pour $25$ personnes ; $2$ sorties pour $50$ ; $4$ sorties pour $5$ ; $5$ sorties pour $20$. Combien de personnes sont allées au cinéma au moins $4$ fois ? Construire le diagramme en barres.</p>
+    <button class="btn" onclick="toggle('c12')">Voir le corrigé</button>
+    <div id="c12" class="sol">$5 + 20 = 25$ personnes. Diagramme : quatre barres de hauteurs $25$, $50$, $5$ et $20$ (échelle : $1$ carreau pour $5$ personnes). Vérification : $100$ personnes au total.</div>
+  </div>
+  <div class="card">
+    <div class="level">Approfondissement</div>
+    <p>13. Un diagramme circulaire représente $60$ élèves. Un secteur représente $\dfrac{3}{4}$ du disque. Combien d'élèves sont dans ce secteur, et combien sont hors du secteur ?</p>
+    <button class="btn" onclick="toggle('c13')">Voir le corrigé</button>
+    <div id="c13" class="sol">Dans le secteur : $\dfrac{3}{4} \times 60 = 45$. Hors du secteur : $60 - 45 = 15$.</div>
+  </div>
+</section>
+
+<!-- ================= AUTOMATISMES ================= -->
+<section id="automatismes" class="view">
+  <h2>Automatismes</h2>
+  <div class="score">Score : <span id="score">0</span> / <span id="total">0</span></div>
+  <div id="quiz"></div>
+</section>
+
+<!-- ================= RÉSOLUTION DE PROBLÈMES ================= -->
+<section id="problemes" class="view">
+  <h2>Résolution de problèmes</h2>
+  <div class="box met"><strong>Méthode en 4 étapes</strong>
+    1. Lire l'énoncé deux fois et repérer les données avec leurs unités.<br>
+    2. Choisir l'opération.<br>
+    3. Calculer, puis donner un ordre de grandeur pour vérifier.<br>
+    4. Rédiger la réponse avec l'unité.
+  </div>
+
+  <div class="card">
+    <div class="level">Problème 1 · Socle</div>
+    <p>Un magasin vend $120$ tee-shirts en une semaine. Un tiers sont rouges, les autres sont bleus. Combien de tee-shirts bleus ont été vendus ?</p>
+    <button class="btn" onclick="toggle('p1')">Voir la solution</button>
+    <div id="p1" class="sol">Rouges : $\dfrac{1}{3} \times 120 = 40$. Bleus : $120 - 40 = 80$. <em>Réponse :</em> $80$ tee-shirts bleus.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 2 · Socle</div>
+    <p>Une classe de $26$ élèves compte $14$ filles. Combien de garçons ?</p>
+    <button class="btn" onclick="toggle('p2')">Voir la solution</button>
+    <div id="p2" class="sol">$26 - 14 = 12$. <em>Réponse :</em> $12$ garçons.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 3 · Standard</div>
+    <p>Trois classes ont lu $18$, $25$ et $20$ livres. Chaque livre compte $250$ pages. Combien de pages ont été lues ? Donner un ordre de grandeur avant de calculer.</p>
+    <button class="btn" onclick="toggle('p3')">Voir la solution</button>
+    <div id="p3" class="sol">Ordre de grandeur : $60$ livres $\times 250 = 15\,000$ pages. Calcul : $18 + 25 + 20 = 63$, puis $63 \times 250 = 15\,750$. <em>Réponse :</em> $15\,750$ pages.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 4 · Standard</div>
+    <p>Un sondage porte sur $30$ élèves. La moitié préfère le football. Parmi les autres, un tiers préfère la natation. Combien préfèrent la natation ?</p>
+    <button class="btn" onclick="toggle('p4')">Voir la solution</button>
+    <div id="p4" class="sol">Football : $15$. Les autres : $15$. Natation : $\dfrac{1}{3} \times 15 = 5$. <em>Réponse :</em> $5$ élèves.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 5 · Standard</div>
+    <p>Un cycliste roule à vitesse constante : $12$ km après $1$ h, $24$ km après $2$ h, $36$ km après $3$ h. Quelle distance parcourt-il en $5$ h ?</p>
+    <button class="btn" onclick="toggle('p5')">Voir la solution</button>
+    <div id="p5" class="sol">Il parcourt $12$ km par heure : $5 \times 12 = 60$ km. <em>Réponse :</em> $60$ km.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 6 · Approfondissement</div>
+    <p>Un diagramme circulaire représente $60$ élèves. Le secteur « bus » vaut $\dfrac{1}{4}$ du disque, le secteur « marche » vaut $\dfrac{1}{3}$. Les autres viennent en vélo. Combien d'élèves viennent en vélo ?</p>
+    <button class="btn" onclick="toggle('p6')">Voir la solution</button>
+    <div id="p6" class="sol">Bus : $15$. Marche : $20$. Vélo : $60 - 15 - 20 = 25$. <em>Réponse :</em> $25$ élèves.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 7 · Standard</div>
+    <p>En 2022, il y avait $38\,820\,000$ voitures en circulation en France. Chacune a parcouru en moyenne $12\,000$ km. Donner un ordre de grandeur du total des kilomètres, puis le calcul exact.</p>
+    <button class="btn" onclick="toggle('p7')">Voir la solution</button>
+    <div id="p7" class="sol">Ordre de grandeur : $40$ millions $\times 12\,000$ km $= 480$ milliards de km.<br>Calcul exact : $38\,820\,000 \times 12\,000 = 465\,840\,000\,000$ km. <em>Réponse :</em> environ $466$ milliards de km.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 8 · Approfondissement</div>
+    <p>Léa et Tom ont ensemble $52$ billes. Léa a trois fois plus de billes que Tom. Combien de billes a chacun ?</p>
+    <button class="btn" onclick="toggle('p8')">Voir la solution</button>
+    <div id="p8" class="sol">Il y a $1 + 3 = 4$ parts. Une part vaut $52 \div 4 = 13$. <em>Réponse :</em> Tom $13$ billes, Léa $39$ billes.</div>
+  </div>
+  <div class="card">
+    <div class="level">Problème 9 · Approfondissement</div>
+    <p>Un collège compte $224$ élèves en 6e, $197$ en 5e, $198$ en 4e et $167$ en 3e. Donner un ordre de grandeur du total, puis le nombre exact.</p>
+    <button class="btn" onclick="toggle('p9')">Voir la solution</button>
+    <div id="p9" class="sol">Ordre de grandeur : $800$. Calcul exact : $786$ élèves.</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === id));
+  document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === id));
+  window.scrollTo({top:0});
+  renderMath();
+}
+function toggle(id){
+  document.getElementById(id).classList.toggle('open');
+  renderMath();
+}
+function renderMath(){
+  if (window.renderMathInElement) renderMathInElement(document.body, {
+    delimiters: [{left:'$$', right:'$$', display:true},{left:'$', right:'$', display:false}],
+    throwOnError:false
+  });
+}
+
+/* ---------- Automatismes ---------- */
+const QUESTIONS = [
+  {q:"Quel nombre s'écrit « deux-millions-trois-cent-quarante-cinq-mille-six-cents » ?", o:["$2\\,345\\,600$","$2\\,345\\,060$","$2\\,003\\,456$"], a:0},
+  {q:"Dans $5\\,406\\,217$, quel est le chiffre des centaines de mille ?", o:["$4$","$5$","$6$"], a:0},
+  {q:"Quel est l'ordre de grandeur de $48\\,312\\,000$ ?", o:["$4$ millions","$4$ milliards","$50$ millions"], a:2},
+  {q:"Dans $784\\,095$, le chiffre des dizaines de mille est :", o:["$8$","$4$","$7$"], a:0},
+  {q:"Calculer $15 \\times 100$.", o:["$150$","$1\\,500$","$15\\,000$"], a:1},
+  {q:"Calculer mentalement $7\\,500 \\times 11$.", o:["$82\\,500$","$75\\,110$","$8\\,250$"], a:0},
+  {q:"Calculer $3\\,000 - 1\\,250$.", o:["$2\\,250$","$1\\,750$","$1\\,850$"], a:1},
+  {q:"Donner un ordre de grandeur de $1\\,987 + 2\\,023$.", o:["$3\\,000$","$4\\,000$","$2\\,000$"], a:1},
+  {q:"Quel est le produit de $25$ par $4$ ?", o:["$100$","$29$","$425$"], a:0},
+  {q:"Dans un tableau, $6$ élèves préfèrent le cinéma, $9$ le sport et $5$ la musique. Combien d'élèves ont été interrogés ?", o:["$19$","$20$","$21$"], a:1},
+  {q:"Un diagramme circulaire représente $40$ élèves. Un secteur est la moitié du disque. Combien d'élèves sont dans ce secteur ?", o:["$10$","$30$","$20$"], a:2},
+  {q:"Dans un graphique cartésien, la grandeur placée sur l'axe horizontal s'appelle :", o:["l'axe des abscisses","l'axe des ordonnées","l'effectif"], a:0}
+];
+(function buildQuiz(){
+  const zone = document.getElementById('quiz');
+  document.getElementById('total').textContent = QUESTIONS.length;
+  let score = 0;
+  QUESTIONS.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<p>${i+1}. ${item.q}</p><div class="choices"></div><div class="feedback"></div>`;
+    const choices = card.querySelector('.choices');
+    const fb = card.querySelector('.feedback');
+    item.o.forEach((txt, j) => {
+      const b = document.createElement('button');
+      b.innerHTML = txt;
+      b.addEventListener('click', () => {
+        if (card.dataset.done) return;
+        card.dataset.done = '1';
+        const ok = j === item.a;
+        if (ok) score++;
+        document.getElementById('score').textContent = score;
+        b.classList.add(ok ? 'good' : 'bad');
+        choices.querySelectorAll('button').forEach((x, k) => { if (k === item.a) x.classList.add('good'); x.disabled = true; });
+        fb.textContent = ok ? 'Bravo !' : 'Pas tout à fait : la bonne réponse est en vert.';
+        renderMath();
+      });
+      choices.appendChild(b);
+    });
+    zone.appendChild(card);
+  });
+})();
+
+window.addEventListener('load', renderMath);
+</script>
+</body>
+</html>
