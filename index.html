@@ -108,6 +108,14 @@
   </details>
 
   <!-- AJOUTER UN NOUVEAU CHAPITRE 6E ICI -->
+
+  <details open class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <summary class="cursor-pointer list-none px-6 py-4 font-semibold text-marine hover:bg-slate-50">📘 Cahier de textes – progression au jour le jour</summary>
+    <div class="px-6 pb-6 space-y-4">
+      <div id="filtres-6e" class="flex flex-wrap gap-2"></div>
+      <div id="cahier-6e" class="space-y-4"></div>
+    </div>
+  </details>
 </section>
 
 <!-- ================= ESPACE 5e ================= -->
@@ -143,6 +151,14 @@
   </details>
 
   <!-- AJOUTER UN NOUVEAU CHAPITRE 5e ICI -->
+
+  <details open class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <summary class="cursor-pointer list-none px-6 py-4 font-semibold text-marine hover:bg-slate-50">📘 Cahier de textes – progression au jour le jour</summary>
+    <div class="px-6 pb-6 space-y-4">
+      <div id="filtres-5e" class="flex flex-wrap gap-2"></div>
+      <div id="cahier-5e" class="space-y-4"></div>
+    </div>
+  </details>
 </section>
 
 <!-- ================= ESPACE 4e ================= -->
@@ -180,6 +196,14 @@
   </details>
 
   <!-- AJOUTER UN NOUVEAU CHAPITRE 4e ICI -->
+
+  <details open class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <summary class="cursor-pointer list-none px-6 py-4 font-semibold text-marine hover:bg-slate-50">📘 Cahier de textes – progression au jour le jour</summary>
+    <div class="px-6 pb-6 space-y-4">
+      <div id="filtres-4e" class="flex flex-wrap gap-2"></div>
+      <div id="cahier-4e" class="space-y-4"></div>
+    </div>
+  </details>
 </section>
 
 <!-- ================= OUTILS & MÉTHODE ================= -->
@@ -211,6 +235,65 @@
 <footer class="text-center text-xs text-slate-500 py-6">© Emad Armanios · Mathématiques au collège</footer>
 
 <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-emeraude text-white px-5 py-3 rounded-xl shadow-lg text-sm opacity-0 transition-opacity pointer-events-none">✅ Consigne copiée !</div>
+
+<!-- =========================================================
+     CAHIER DE TEXTES – DONNÉES
+     Pour ajouter une séance : copiez un bloc { ... }, collez-le
+     à la fin du tableau (avant le ]; ), puis modifiez les valeurs.
+     - date : format AAAA-MM-JJ
+     - pdfCours / pdfExercices / pdfCorrige : chemin du fichier
+       (ex. "pdf/5e-ch9-cours.pdf"). Laisser "" pour masquer le bouton.
+     - travail / dateLimite : "" si rien à faire
+     ========================================================= -->
+<script>
+const progressionData = [
+  /* ---------- 6e ---------- */
+  {
+    niveau: "6e", chapitre: 8, titreChapitre: "Droites et cercles",
+    date: "2026-11-12", seance: 7,
+    cours: ["Droites sécantes, parallèles, perpendiculaires ; notations $(d)$, $[AB]$, $[AB)$", "Propriété : deux droites perpendiculaires à une même troisième sont parallèles"],
+    exercices: ["Ex 14 à 16 du manuel : tracer des parallèles et perpendiculaires à l'équerre", "Ex 22 : coder les angles droits et les segments de même longueur"],
+    pdfCours: "", pdfExercices: "", pdfCorrige: "",
+    travail: "Revoir la notation des droites et des segments (fiche 8).", dateLimite: "2026-11-16"
+  },
+  {
+    niveau: "6e", chapitre: 8, titreChapitre: "Droites et cercles",
+    date: "2026-11-16", seance: 8,
+    cours: ["Cercle de centre O et de rayon r : tracé au compas, vocabulaire (rayon, diamètre, corde)", "Médiatrice d'un segment : droite perpendiculaire à ce segment passant par son milieu"],
+    exercices: ["Ex 30 : construire la médiatrice à la règle et au compas", "Ex 33 : trouver le centre d'un cercle passant par trois points donnés"],
+    pdfCours: "", pdfExercices: "pdf/6e-ch8-exercices-mediatrice.pdf", pdfCorrige: "",
+    travail: "Ex 34 à 36 (tracés soignés, codages en couleur).", dateLimite: "2026-11-19"
+  },
+
+  /* ---------- 5e ---------- */
+  {
+    niveau: "5e", chapitre: 3, titreChapitre: "Nombres relatifs : repérage et opérations",
+    date: "2026-11-12", seance: 6,
+    cours: ["Distance entre deux points d'une droite graduée : $|x_B - x_A|$", "Addition de relatifs : même signe on ajoute, signes différents on soustrait et on garde le signe du plus grand"],
+    exercices: ["Ex 41 à 44 : additionner et soustraire des relatifs", "Ex 50 : calculer des distances sur une droite graduée"],
+    pdfCours: "", pdfExercices: "", pdfCorrige: "",
+    travail: "Ex 52 et 55 (justifier le signe de chaque résultat).", dateLimite: "2026-11-17"
+  },
+  {
+    niveau: "5e", chapitre: 9, titreChapitre: "Angles",
+    date: "2026-11-16", seance: 1,
+    cours: ["Vocabulaire : angle aigu, obtus, droit, plat ; notation $\\widehat{ABC}$", "Mesure d'un angle au rapporteur : centrer le rapporteur sur le sommet, aligner un côté sur 0°"],
+    exercices: ["Ex 1 et 2 : reconnaître le type d'un angle à vue d'œil puis vérifier", "Ex 5 : mesurer et coder les angles d'un triangle"],
+    pdfCours: "pdf/5e-ch9-angles-cours.pdf", pdfExercices: "", pdfCorrige: "pdf/5e-ch9-angles-corrige.pdf",
+    travail: "Tracer des angles de 40°, 95° et 130° au rapporteur.", dateLimite: "2026-11-19"
+  },
+
+  /* ---------- 4e ---------- */
+  {
+    niveau: "4e", chapitre: 1, titreChapitre: "Le théorème de Pythagore",
+    date: "2026-11-16", seance: 1,
+    cours: ["Racine carrée d'un nombre positif $a$ : $\\sqrt{a}^{\\,2} = a$ ; exemple $\\sqrt{100} = 10$", "Théorème de Pythagore (sens direct) : si $ABC$ est rectangle en $A$, alors $BC^2 = AB^2 + AC^2$"],
+    exercices: ["Ex 1 à 4 du manuel : racines carrées à la calculatrice", "Ex 9 : calcul de l'hypoténuse, rédaction On sait que / Or / Donc"],
+    pdfCours: "pdf/4e-ch1-pythagore-cours.pdf", pdfExercices: "", pdfCorrige: "",
+    travail: "Ex 11 et 13 du manuel (rédaction complète).", dateLimite: "2026-11-18"
+  }
+];
+</script>
 
 <script>
 /* ---------- Consigne IA ---------- */
@@ -256,6 +339,88 @@ function renderMath(el){
     ],
     throwOnError: false
   });
+}
+
+/* ---------- Cahier de textes ---------- */
+const NIVEAUX = ['6e','5e','4e'];
+const cahierFiltre = { '6e':'all', '5e':'all', '4e':'all' };
+
+function formaterDate(iso){
+  const d = new Date(iso + 'T00:00:00');
+  const s = d.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function listeHTML(items){
+  if (!items || !items.length) return '<p class="text-sm text-slate-400">—</p>';
+  return '<ul class="list-disc pl-5 space-y-1 text-sm">' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+}
+
+function carteSeance(s){
+  const boutons = [['pdfCours','📄 Cours'], ['pdfExercices','📝 Exercices'], ['pdfCorrige','✅ Corrigé']]
+    .filter(([k]) => s[k])
+    .map(([k,label]) => `<a href="${s[k]}" download class="px-3 py-1.5 rounded-lg bg-emeraude text-white text-xs font-medium hover:opacity-90">${label}</a>`)
+    .join('');
+
+  const travail = s.travail ? `
+    <div class="rounded-xl border-l-4 border-emeraude bg-emerald-50 p-3 text-sm space-y-1">
+      <p class="font-semibold text-marine">✏️ Travail à faire${s.dateLimite ? ' – à rendre le ' + formaterDate(s.dateLimite) : ''}</p>
+      <p>${s.travail}</p>
+    </div>` : '';
+
+  return `
+    <article class="rounded-xl border border-slate-200 p-5 space-y-3">
+      <header class="flex flex-wrap items-center gap-2 text-sm">
+        <span class="px-2 py-0.5 rounded bg-marine text-white font-semibold">${s.niveau}</span>
+        <span class="font-semibold text-marine">Chapitre ${s.chapitre} : ${s.titreChapitre}</span>
+        <span class="text-slate-500">· Séance ${s.seance} du chapitre</span>
+      </header>
+      <p class="text-sm font-medium text-slate-700">${formaterDate(s.date)}</p>
+      <div class="space-y-1">
+        <h4 class="font-semibold text-marine text-sm">Contenu du cours</h4>
+        ${listeHTML(s.cours)}
+      </div>
+      <div class="space-y-1">
+        <h4 class="font-semibold text-marine text-sm">Exercices traités en classe</h4>
+        ${listeHTML(s.exercices)}
+      </div>
+      ${boutons ? `<div class="flex flex-wrap gap-2">${boutons}</div>` : ''}
+      ${travail}
+    </article>`;
+}
+
+function renderCahier(niveau){
+  const entrees = progressionData.filter(s => s.niveau === niveau);
+  const chapitres = [...new Set(entrees.map(s => s.chapitre))].sort((a,b) => a - b);
+  const filtre = cahierFiltre[niveau];
+  const filtresBox = document.getElementById('filtres-' + niveau);
+  const liste = document.getElementById('cahier-' + niveau);
+  if (!filtresBox || !liste) return;
+
+  const bouton = (val, label) => {
+    const arg = val === 'all' ? "'all'" : val;
+    const actif = filtre === val;
+    return `<button onclick="filtrerCahier('${niveau}', ${arg})" class="px-3 py-1.5 rounded-lg text-sm font-medium border ${actif ? 'bg-marine text-white border-marine' : 'bg-white text-marine border-slate-300 hover:bg-ciel/20'}">${label}</button>`;
+  };
+  const titre = n => entrees.find(s => s.chapitre === n).titreChapitre;
+
+  filtresBox.innerHTML = bouton('all', 'Tous les chapitres')
+    + chapitres.map(n => bouton(n, `Ch. ${n} – ${titre(n)}`)).join('');
+
+  const visibles = entrees
+    .filter(s => filtre === 'all' || s.chapitre === filtre)
+    .sort((a,b) => b.date.localeCompare(a.date) || b.seance - a.seance);
+
+  liste.innerHTML = visibles.length
+    ? visibles.map(carteSeance).join('')
+    : '<p class="text-sm text-slate-500">Aucune séance enregistrée pour ce filtre.</p>';
+
+  renderMath(liste);
+}
+
+function filtrerCahier(niveau, chap){
+  cahierFiltre[niveau] = chap;
+  renderCahier(niveau);
 }
 
 /* ---------- Mini-QCM ---------- */
@@ -332,6 +497,7 @@ function buildQuiz(el){
 /* ---------- Démarrage ---------- */
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-quiz]').forEach(buildQuiz);
+  NIVEAUX.forEach(renderCahier);
   show(location.hash.slice(1) || 'accueil');
 });
 </script>
